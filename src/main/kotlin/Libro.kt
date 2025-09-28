@@ -1,5 +1,5 @@
 package org.example
 
-fun libro(){
+class Libro(){
 
 }
