@@ -1,5 +1,7 @@
 package org.example
 
-class EstadoPrestamo {
-
+sealed class EstadoPrestamo {
+    object Pendiente : EstadoPrestamo()
+    object EnPrestamo : EstadoPrestamo()
+    object Devuelto : EstadoPrestamo()
 }
