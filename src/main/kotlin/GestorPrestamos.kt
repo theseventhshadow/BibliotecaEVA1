@@ -10,6 +10,7 @@ class GestorPrestamos {
     private val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private val catalogo = mutableListOf<Libro>()
+    public val librosArrendados = mutableListOf<Libro>()
 
     fun inicializarCatalogo(){
         catalogo.addAll(
@@ -36,6 +37,11 @@ class GestorPrestamos {
             }
             println()
         }
+    }
+
+    fun arrendarLibro(idLibro: Int) {
+        val libro = catalogo.get(idLibro)
+        librosArrendados.add(libro)
     }
 
     fun calculaMulta(){}
