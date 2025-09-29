@@ -20,7 +20,7 @@ coroutineContext
 
     var salir = false
     while (!salir) {
-        println("*** Tienes ${gestor.librosArrendados.size} libro(s) en tu carrito. ***")
+
         println(
             "Seleccione una opcion numérica: \n" +
                     "1.- Mostrar libros disponibles.\n" +
@@ -56,7 +56,7 @@ coroutineContext
 
                             println("-".repeat(20))
                             println("Informacion sobre los libros:")
-                            gestor.añadirLibro(selLibro - 1)
+                            gestor.anadirLibro(selLibro - 1)
                             println("-".repeat(20))
                             break
                         }
@@ -66,17 +66,26 @@ coroutineContext
                             println("Ir al pago.")
                             println("-".repeat(20))
 
-                            println("Seleccione su Categoría de Usuario:\n" +
-                                    "1.- Estudiante.\n" +
-                                    "2.- Docente.\n" +
-                                    "3.- Externo.\n")
+                            if (gestor.librosArrendados.size > 0){
+                                println("Seleccione su Categoría de Usuario:\n" +
+                                        "1.- Estudiante.\n" +
+                                        "2.- Docente.\n" +
+                                        "3.- Externo.\n")
 
-                            val categoriaUsuario = readLine()?.toIntOrNull() ?: 0
+                                val categoriaUsuario = readLine()?.toIntOrNull() ?: 0
 
-                            gestor.aplicarDescuentos(categoriaUsuario)
+                                gestor.aplicarDescuentos(categoriaUsuario)
 
-                            break
+                                break
+                            }
+                            else{
+                                println("=".repeat(60))
+                                print("No tienes productos añadidos en tu carrito. :P\n")
+                                println("=".repeat(60))
+                                break
+                            }
                         }
+
 
                         3 -> {
                             println("-".repeat(20))
@@ -100,6 +109,22 @@ coroutineContext
                 println("Devolver un libro.")
                 println("-".repeat(20))
 
+                println("*** Tienes ${gestor.librosArrendados.size} libro(s) arrendados: ***\n")
+                if (gestor.librosArrendados.size > 0){
+                    gestor.mostrarArrendados()
+                    println("\nIngrese el ID del libro a devolver:\n")
+                    val idDevolucion = readLine()?.toIntOrNull() ?: 0
+
+                    gestor.calculaMulta(idDevolucion)
+                }
+                else{
+                    println("=".repeat(50))
+                    print("No tienes productos para devolver. :P\n")
+                    println("=".repeat(50))
+                }
+
+
+
             }
 
             3 -> {
@@ -107,6 +132,14 @@ coroutineContext
                 println("Saliendo del sistema.")
                 println("-".repeat(20))
                 salir = true
+            }
+
+            4 -> {
+                println("-".repeat(20))
+                println("Easter Egg.")
+                println("-".repeat(20))
+
+                gestor.easterEggAhorcado()
             }
 
             else -> {
