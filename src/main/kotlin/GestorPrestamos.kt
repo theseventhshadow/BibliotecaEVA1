@@ -9,7 +9,7 @@ import kotlin.math.roundToInt
 class GestorPrestamos {
 
     private val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private val random = (100..1000).random()
+    val random = (1000..4000).random()
 
 
     // Lista de libros disponibles en el sistema
@@ -20,10 +20,10 @@ class GestorPrestamos {
     fun inicializarCatalogo(){
         catalogo.addAll(
             listOf(
-                LibroFisico("Estructuras de Datos", "Goodrich", 12990, 7, false),
-                LibroFisico("Diccionario Enciclopédico", "Varios Autores", 15990, 0, true),
-                LibroDigital("Programación en Kotlin", "JetBrains", 9990, 10, true),
-                LibroDigital("Algoritmos Básicos", "Cormen", 11990, 10, false)
+                LibroFisico("Estructuras de Datos", "Goodrich", 12990, 0, false),
+                LibroFisico("Diccionario Enciclopédico", "Varios Autores", 15990, 7, true),
+                LibroDigital("Programación en Kotlin", "JetBrains", 9990, 5, true),
+                LibroDigital("Algoritmos Básicos", "Cormen", 11990, 4, false)
             )
         )
     }
@@ -45,7 +45,10 @@ class GestorPrestamos {
         }
     }
 
-    // Simula un carrito, con los libros añadidos.
+    /*
+        Simula un carrito, con los libros añadidos. Además maneja excepciones para
+        cuando los libros no son prestables, o para cuando la ID ingresada del libro es inválida.
+    */
     fun añadirLibro(idLibro: Int){
         try {
             val libro = catalogo.get(idLibro)
@@ -62,8 +65,20 @@ class GestorPrestamos {
         }
     }
 
+    /*
+        Calcula la multa que se debe pagar si el libro no se devuelve en el plazo estipulado.
+        Cada libro tiene un valor 'diasPrestamo' que indica los dias que ha sido prestado. Se usa
+        un valor Random que simula un retraso en la entrega del libro en dias. En base a ese valor se calcula
+        la multa.
+    */
     fun calculaMulta(){}
 
+
+    /*
+        Función con delay que simula el proceso de pago del libro. Lee la lista de librosArrendados, calcula
+        el precio final y muestra el resutado llamando a la funcion presentarResultados().
+        El delay simula el tiempo que tarda la boleta en generarse.
+    */
 
     suspend fun aplicarDescuentos(categoriaUsuario: Int){
 
@@ -71,8 +86,20 @@ class GestorPrestamos {
         val totalSinDescuentos = librosArrendados.sumOf { it.precioBase }
 
         println("El total sin descuentos es de $${totalSinDescuentos}")
-        println("Se está aplicando el descuento. Espere unos 3 segundos....")
-        delay(3000)
+
+        if (categoriaUsuario == 1){
+            println("Se ha aplicado el descuento de Estudiante (10%)\n" +
+                    "Generando boleta...")
+        }else if (categoriaUsuario == 2){
+            println("Se ha aplicado el descuento de Docente (15%)\n" +
+                    "Generando boleta...")
+        }else if (categoriaUsuario == 3){
+            println("Booo!!! Los externos no tienen descuento\n" +
+                    "Generando boleta...")
+        }
+
+        // Aplicamos un tiempo de delay que simula un proceso en ejecucion...
+        delay(4000)
 
         when(categoriaUsuario){
 
@@ -94,14 +121,14 @@ class GestorPrestamos {
             else -> {
                 println("Valor inválido. Reintente")
             }
-
         }
-
         librosArrendados.clear()
-
     }
 
-    // Muestra los libros arrendados en el sistema y una boleta con los precios y descuentos aplicados.
+    /*
+     Muestra una boleta con los precios y descuentos aplicados. Esta funcion
+     es llamada desde aplicarDescuentos().
+    */
     fun presentarResultados(precioFinal : Int, totalSinDescuentos: Int){
 
         println("=".repeat(60))
@@ -121,6 +148,4 @@ class GestorPrestamos {
         println("=".repeat(60))
 
     }
-
-
 }

@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking{
 coroutineContext
+
     //Se inicializa la clase "GestorPrestamos"
     val gestor = GestorPrestamos()
 
@@ -79,7 +80,7 @@ coroutineContext
 
                         3 -> {
                             println("-".repeat(20))
-                            println("Cancelar el proceso.")
+                            println("Volver atrás.")
                             println("-".repeat(20))
                             break
                         }
@@ -109,7 +110,9 @@ coroutineContext
             }
 
             else -> {
+                println("-".repeat(20))
                 println("La opcion ingresada no existe. Reintente\n")
+                println("-".repeat(20))
             }
 
         }
