@@ -1,7 +1,9 @@
 package org.example
 
-fun main() {
+import kotlinx.coroutines.runBlocking
 
+fun main() = runBlocking{
+coroutineContext
     //Se inicializa la clase "GestorPrestamos"
     val gestor = GestorPrestamos()
 
@@ -17,6 +19,7 @@ fun main() {
 
     var salir = false
     while (!salir) {
+        println("*** Tienes ${gestor.librosArrendados.size} libro(s) en tu carrito. ***")
         println(
             "Seleccione una opcion numérica: \n" +
                     "1.- Mostrar libros disponibles.\n" +
@@ -36,9 +39,10 @@ fun main() {
                 gestor.imprimirCatalogo()
 
                 println(
-                    "¿Desea arrendar algun libro?\n" +
-                            "1.- Si\n" +
-                            "2.- No\n"
+                    "¿Qué desea hacer?\n" +
+                            "1.- Agregar libros a mi carrito\n" +
+                            "2.- Ir al pago\n" +
+                            "3.- Cancelar el proceso.\n"
                 )
                 val respuesta = readLine()?.toIntOrNull() ?: 0
 
@@ -49,14 +53,33 @@ fun main() {
                             println("Seleccione el libro a arrendar (ingrese valores numéricos):\n")
                             val selLibro = readLine()?.toIntOrNull() ?: 0
 
-                            gestor.arrendarLibro(selLibro - 1)
-                            println("Se ha arrendado el libro.\n")
+                            println("-".repeat(20))
+                            println("Informacion sobre los libros:")
+                            gestor.añadirLibro(selLibro - 1)
+                            println("-".repeat(20))
                             break
                         }
 
                         2 -> {
                             println("-".repeat(20))
-                            println("Volviendo al menú principal...")
+                            println("Ir al pago.")
+                            println("-".repeat(20))
+
+                            println("Seleccione su Categoría de Usuario:\n" +
+                                    "1.- Estudiante.\n" +
+                                    "2.- Docente.\n" +
+                                    "3.- Externo.\n")
+
+                            val categoriaUsuario = readLine()?.toIntOrNull() ?: 0
+
+                            gestor.aplicarDescuentos(categoriaUsuario)
+
+                            break
+                        }
+
+                        3 -> {
+                            println("-".repeat(20))
+                            println("Cancelar el proceso.")
                             println("-".repeat(20))
                             break
                         }
@@ -85,10 +108,8 @@ fun main() {
                 salir = true
             }
 
-            4 -> {
-                gestor.librosArrendados.forEachIndexed { index, libro ->
-                    println("Nombre:  ${libro.titulo}")
-                }
+            else -> {
+                println("La opcion ingresada no existe. Reintente\n")
             }
 
         }
